@@ -1,4 +1,6 @@
+using ConsoleApp.PostgreSQL;
 using dotnet_videos_review_api.Services.VideoService;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IVideoService, VideoService>();
+
+builder
+    .Services
+    .AddDbContext<VideosContext>(
+        options => options.UseNpgsql(builder.Configuration.GetConnectionString("VideosContext"))
+    );
 
 var app = builder.Build();
 

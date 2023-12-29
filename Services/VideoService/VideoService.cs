@@ -2,37 +2,93 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ConsoleApp.PostgreSQL;
+using dotnet_videos_review_api.Dtos.Videos;
 using dotnet_videos_review_api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_videos_review_api.Services.VideoService
 {
     public class VideoService : IVideoService
     {
-        private static List<Video> videos = new List<Video> { new Video(), new Video(), };
+        private readonly VideosContext _context;
 
-        public Video AddVideo(Video video)
+        public VideoService(VideosContext context)
         {
-            videos.Add(video);
-            return video;
+            _context = context;
         }
 
-        public Video GetVideo(int id)
+        public async Task<ServiceResponse<GetVideoDto>> AddVideo(AddVideoDto video)
         {
-            var video = videos.FirstOrDefault(video => video.Id == id);
+            var dbCreateVideo = await _context
+                .Videos
+                .AddAsync(
+                    new Video
+                    {
+                        Title = video.Title,
+                        Description = video.Description,
+                        Director = video.Director,
+                        Review = video.Review
+                    }
+                );
 
-            if (video != null)
+            await _context.SaveChangesAsync();
+
+            var serviceResponse = new ServiceResponse<GetVideoDto>();
+            var getVideo = new GetVideoDto
             {
-                return video;
+                Id = dbCreateVideo.Entity.Id,
+                Title = dbCreateVideo.Entity.Title,
+                Description = dbCreateVideo.Entity.Description,
+                Director = dbCreateVideo.Entity.Director,
+                Review = dbCreateVideo.Entity.Review
+            };
+            serviceResponse.Data = getVideo;
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetVideoDto>> GetVideo(int id)
+        {
+            var dbVideo = await _context.Videos.FirstOrDefaultAsync(video => video.Id == id);
+            var serviceResponse = new ServiceResponse<GetVideoDto>();
+
+            if (dbVideo != null)
+            {
+                var getVideoDto = new GetVideoDto
+                {
+                    Id = dbVideo.Id,
+                    Title = dbVideo.Title,
+                    Description = dbVideo.Description,
+                    Director = dbVideo.Director,
+                    Review = dbVideo.Review
+                };
+                serviceResponse.Data = getVideoDto;
+                return serviceResponse;
             }
 
             throw new Exception("Video not found");
         }
 
         [HttpPost]
-        public List<Video> GetVideos()
+        public async Task<ServiceResponse<List<GetVideoDto>>> GetVideos()
         {
-            return videos;
+            var dbVideos = await _context.Videos.ToListAsync();
+            var serviceResponse = new ServiceResponse<List<GetVideoDto>>();
+            serviceResponse.Data = dbVideos
+                .Select(
+                    video =>
+                        new GetVideoDto
+                        {
+                            Id = video.Id,
+                            Title = video.Title,
+                            Description = video.Description,
+                            Director = video.Director,
+                            Review = video.Review
+                        }
+                )
+                .ToList();
+            return serviceResponse;
         }
     }
 }

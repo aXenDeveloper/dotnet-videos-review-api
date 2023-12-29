@@ -5,14 +5,28 @@ This is a simple API that allows you to create, read, update and delete (CRUD) v
 ## ⚠️ Requirements
 
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
-
-## ⚠️ Requirements for VSCode
-
-- test
+- [Docker](https://www.docker.com/products/docker-desktop)
 
 ## 🧰 Install
 
-test
+### Docker
+
+```
+docker-compose -f ./docker-compose.yml -p dotnet_videos up -d
+dotnet tool install --global dotnet-ef
+```
+
+### dotnet-ef
+
+```
+dotnet tool install --global dotnet-ef
+```
+
+### Update Database
+
+```
+dotnet ef database update
+```
 
 ## 🛠 Developer Server
 

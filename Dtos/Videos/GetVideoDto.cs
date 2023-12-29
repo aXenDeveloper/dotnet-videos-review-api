@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnet_videos_review_api.Models;
 
-namespace dotnet_videos_review_api.Models
+namespace dotnet_videos_review_api.Dtos.Videos
 {
-    public class Video
+    public class GetVideoDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = "";

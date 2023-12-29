@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnet_videos_review_api.Dtos.Videos;
 using dotnet_videos_review_api.Models;
 using dotnet_videos_review_api.Services.VideoService;
 using Microsoft.AspNetCore.Mvc;
@@ -20,21 +21,21 @@ namespace dotnet_videos_review_api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Video>> Get()
+        public async Task<ActionResult<List<GetVideoDto>>> Get()
         {
-            return Ok(_videoService.GetVideos());
+            return Ok(await _videoService.GetVideos());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Video> GetSingle(int id)
+        public async Task<ActionResult<GetVideoDto>> GetSingle(int id)
         {
-            return Ok(_videoService.GetVideo(id));
+            return Ok(await _videoService.GetVideo(id));
         }
 
         [HttpPost]
-        public ActionResult<Video> Post(Video video)
+        public async Task<ActionResult<GetVideoDto>> Post(AddVideoDto video)
         {
-            return Ok(_videoService.AddVideo(video));
+            return Ok(await _videoService.AddVideo(video));
         }
     }
 }
