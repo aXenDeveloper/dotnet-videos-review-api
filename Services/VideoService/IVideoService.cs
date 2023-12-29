@@ -14,5 +14,9 @@ namespace dotnet_videos_review_api.Services.VideoService
         Task<ServiceResponse<GetVideoDto>> GetVideo(int id);
 
         Task<ServiceResponse<GetVideoDto>> AddVideo(AddVideoDto video);
+
+        Task<ServiceResponse<GetVideoDto>> UpdateVideo(UpdateVideoDto video);
+
+        Task<ServiceResponse<List<GetVideoDto>>> DeleteVideo(int id);
     }
 }

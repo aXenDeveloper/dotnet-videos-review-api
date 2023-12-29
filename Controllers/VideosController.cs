@@ -37,5 +37,31 @@ namespace dotnet_videos_review_api.Controllers
         {
             return Ok(await _videoService.AddVideo(video));
         }
+
+        [HttpPut]
+        public async Task<ActionResult<GetVideoDto>> Put(UpdateVideoDto video)
+        {
+            var response = await _videoService.UpdateVideo(video);
+
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<GetVideoDto>>> Delete(int id)
+        {
+            var response = await _videoService.DeleteVideo(id);
+
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
     }
 }

@@ -13,7 +13,6 @@ This is a simple API that allows you to create, read, update and delete (CRUD) v
 
 ```
 docker-compose -f ./docker-compose.yml -p dotnet_videos up -d
-dotnet tool install --global dotnet-ef
 ```
 
 ### dotnet-ef
